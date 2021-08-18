@@ -2,9 +2,13 @@
   "name": "vscode-ripplet",
   "displayName": "vscode-ripplet",
   "description": "extension for ripplet supports",
+  "publisher": "hsiaosiyuan0",
+  "repository": {
+    "url": "https://github.com/hsiaosiyuan0/vscode-ripplet.git"
+  },
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.57.0"
+    "vscode": "^1.59.0"
   },
   "categories": [
     "Programming Languages"

@@ -1,0 +1,256 @@
+{
+  "name": "Ripplet",
+  "scopeName": "source.ripplet",
+  "patterns": [
+    {
+      "include": "source.go#comments"
+    },
+    {
+      "comment": "Interpreted string literals",
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.go"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.go"
+        }
+      },
+      "name": "string.quoted.double.go",
+      "patterns": [
+        {
+          "include": "#string_escaped_char"
+        }
+      ]
+    },
+    {
+      "comment": "Function declarations",
+      "match": "\\s*(\\([^\\)]*\\))\\s*(=>)(?=\\s*\\{)",
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#brackets"
+            },
+            {
+              "include": "#operators"
+            }
+          ]
+        },
+        "2": {
+          "patterns": [
+            {
+              "match": "=>",
+              "name": "keyword.control.go"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "comment": "Functions",
+      "match": "(\\bfunc\\b)|(\\w+)(?=\\()",
+      "captures": {
+        "1": {
+          "name": "keyword.function.go"
+        },
+        "2": {
+          "patterns": [
+            {
+              "match": "\\d\\w*",
+              "name": "invalid.illegal.identifier.go"
+            },
+            {
+              "match": "\\w+",
+              "name": "support.function.go"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "include": "source.go#numeric_literals"
+    },
+    {
+      "include": "source.go#string_escaped_char"
+    },
+    {
+      "include": "source.go#string_placeholder"
+    },
+    {
+      "include": "#brackets"
+    },
+    {
+      "include": "source.go#delimiters"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "comment": "Language constants",
+      "match": "\\b(true|false|nil)\\b",
+      "name": "constant.language.go"
+    },
+    {
+      "match": "(?<!var)\\s*(\\w+(?:\\.\\w+)*(?>,\\s*\\w+(?:\\.\\w+)*)*)(?=\\s*=(?!=))",
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "match": "\\d\\w*",
+              "name": "invalid.illegal.identifier.go"
+            },
+            {
+              "match": "\\w+(?:\\.\\w+)*",
+              "name": "variable.other.assignment.go",
+              "captures": {
+                "0": {
+                  "patterns": [
+                    {
+                      "include": "source.go#delimiters"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "include": "source.go#delimiters"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "match": "\\b\\w+(?:,\\s*\\w+)*(?=\\s*:=)",
+      "captures": {
+        "0": {
+          "patterns": [
+            {
+              "match": "\\d\\w*",
+              "name": "invalid.illegal.identifier.go"
+            },
+            {
+              "match": "\\w+",
+              "name": "variable.other.assignment.go"
+            },
+            {
+              "include": "source.go#delimiters"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "repository": {
+    "brackets": {
+      "patterns": [
+        {
+          "begin": "{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.begin.bracket.curly.go"
+            }
+          },
+          "end": "}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.end.bracket.curly.go"
+            }
+          },
+          "patterns": [
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "begin": "\\(",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.begin.bracket.round.go"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.end.bracket.round.go"
+            }
+          },
+          "patterns": [
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "match": "\\[|\\]",
+          "name": "punctuation.definition.bracket.square.go"
+        }
+      ]
+    },
+    "string_escaped_char": {
+      "patterns": [
+        {
+          "match": "\\\\([0-7]{3}|[abfnrtv\\\\'\"]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})",
+          "name": "constant.character.escape.go"
+        },
+        {
+          "match": "\\\\[^0-7xuUabfnrtv\\'\"]",
+          "name": "invalid.illegal.unknown-escape.go"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "comment": "Flow control keywords",
+          "match": "\\b(break|case|else|repeat|until|when|if|then|is|return)\\b",
+          "name": "keyword.control.go"
+        }
+      ]
+    },
+    "operators": {
+      "comment": "Note that the order here is very important!",
+      "patterns": [
+        {
+          "match": "\\-\\-",
+          "name": "keyword.operator.decrement.go"
+        },
+        {
+          "match": "\\+\\+",
+          "name": "keyword.operator.increment.go"
+        },
+        {
+          "match": "(==|!=|<=|>=|<(?!<)|>(?!>))",
+          "name": "keyword.operator.comparison.go"
+        },
+        {
+          "match": "(&&|\\|\\||!)",
+          "name": "keyword.operator.logical.go"
+        },
+        {
+          "match": "(=|\\+=|\\-=|\\|=|\\^=|\\*=|/=|:=|%=|<<=|>>=|&\\^=|&=)",
+          "name": "keyword.operator.assignment.go"
+        },
+        {
+          "match": "(\\+|\\-|\\*|/|%)",
+          "name": "keyword.operator.arithmetic.go"
+        },
+        {
+          "match": "(&(?!\\^)|\\||\\^|&\\^|<<|>>)",
+          "name": "keyword.operator.arithmetic.bitwise.go"
+        },
+        {
+          "match": "\\.\\.\\.",
+          "name": "keyword.operator.ellipsis.go"
+        }
+      ]
+    }
+  }
+}
